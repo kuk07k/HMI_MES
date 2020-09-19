@@ -1,0 +1,124 @@
+==================================================
+==================     쿨스 HMI 교육    ==================
+==================================================
+
+＊실행프로그램
+1. OPC SERVER 5
+2. INTOUCH [HMI를 다루는 툴]
+- Tag란? 데이터 값
+
+＊HMI : 생산공장의 모니터링화 (Human muchine interface)
+(설비 애니메이션을 통한 데이터 비주얼라이제이션)
+- 기계를 인간화시킨다
+- 실시간 모니터링 시스템 (데이터를 들고와서 모니터에 보여주는 시스템을 구현)
+- HMI 활용분야 : 병원, 차량계기판, 로봇 
+
+PLC - 제어부 (기계어와 같은 데이터를 받음) : 모니터없는 컴퓨터(산업용)
+OPC - 번역부 (기계어를 번역하여 HMI에 뿌림)
+
+PLC에서 데이터를 들고오는데 PLC의 종류가 많음
+호환하기 위해서는 InTouch가 유리 (500개 테그 - 데이터 를 받을수있음)
+
+★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
+＊Intouch 실행방법
+
+REPLACE : 새로운창 뜨면 없어짐
+OVERLAY : 1번이 2번뒤에
+POPUP : 맨위
+
+메뉴 : Width -1920, Height - 200
+저장필수 !! (맨위에 디스크 모양)
+
+ctrl + L : 문자열 바꾸기
+ctrl + d : 복사
+ctrl + t : Tagname dictionary
+ctrl + e : 네모박스안에 문자수정
+ctrl +F5 : 가운데 정렬
+ctrl + z : 되돌리기(6번까지가 한계)
+shift 누르면 다중선택
+
+* 설정
+이산 : Memory discreate
+아날로그 : Memory integer
+메세지 : Memory message
+
+key : 키설정
+Condition : 조건문 주고 그때 돌아가게끔
+Data Change : 이벤트가 생길때마다 값변화주기
+QuickFunctions : 함수만들기 (SQLDB랑 연동할때 사용)
+
+외부에서 받아오는 거 : I/o
+그냥 동작하는거 memory integer
+
+https://diphylleia12.tistory.com/entry/%EA%B3%BC%EC%A0%9C-%EC%A7%80%EA%B2%8C%EC%B0%A8-%ED%81%AC%EB%9E%98%EC%9D%B8-%EC%9E%90%EB%8F%99%EA%B3%B5%EC%A0%95%ED%99%94-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8?category=1080342
+
+https://dongwunblog.tistory.com/4
+
+■■■■■ Classic View ■■■■■
+
+＊Windows
+- 윈도우를 만들어 프레임을 구성
+
+＊Scripts
+[Key] : 키를 활용하여 이벤트 부여
+Key F11 : On key Down : WWControl (InfoAppTitle("View"),"Minimize");
+Key F12 : On key Down : WWControl (InfoAppTitle("View"),"Close");
+
+[Data Change] : 데이터를 바꿔줄때 사용
+Tagname ▶ Tag1
+Tag2 = Tag2 + 2;
+
+[Condition] : 함수를 활용하여 조건을 줄때 사용
+Condition ▶ Tag1 == 1
+While True 일때, 100Msec (0.1초)
+
+Tag2 = Tag2 + 1;
+
+IF Tag2 > 100 THEN
+    Tag2 = 0;
+ENDIF;
+
+■■■■■ Tag ■■■■■
+
+*** PLC에서 데이터 받아올때 쓰는 태그 ***
+Tagname : IOTag1
+TagType : I/O Discrete
+Access Name : DXPSV
+Alarm Group : $System
+Comment : 이산IO태그
+
+Tagname : IOTag2
+TagType : I/O Integer
+Access Name : DXPSV
+Alarm Group : $System
+Comment : 아날로그IO태그
+
+Tagname : IOTag3
+TagType : I/O Message
+Access Name : DXPSV
+Alarm Group : $System
+Comment : 메세지IO태그
+
+*** 변수개념(InTouch에서 사용할)의 태그 ***
+Tagname : Tag1
+TagType : Memory Discrete
+Comment : 이산태그
+
+Tagname : Tag2
+TagType : Memory Integer
+Comment : 아날로그태그
+
+Tagname : Tag3
+TagType : Memory Message
+Comment : 메세지태그
+
+
+[Access Name]
+Access Name : DXPSV
+Application Name : DXPSV
+Topic Name : Device1
+Which protocol to use : suiteLink
+When to advise server : Advise only active items
+
+
